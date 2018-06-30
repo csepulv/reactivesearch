@@ -3,13 +3,14 @@ import React, { Component } from 'react';
 import SearchFilters from './SearchFilters';
 
 import Navbar, { title } from '../styles/Navbar';
-import { ToggleButton } from '../styles/Button';
+import Button, { ToggleButton } from '../styles/Button';
 
 class Header extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			visible: false,
+		  	swapFilterParent:true
 		};
 	}
 
@@ -20,12 +21,27 @@ class Header extends Component {
 		});
 	}
 
+  	toggleFilterParentFlag = () => {
+	  const swapFilterParent = !this.state.swapFilterParent;
+	  this.setState({
+		swapFilterParent,
+	  });
+  	}
+
 	render() {
 		return (
 			<Navbar full={this.state.visible}>
 				<div className={title}>GitXplore</div>
+			  	<Button onClick={this.toggleFilterParentFlag}>Toggle Filter Parent: {this.state.swapFilterParent?"a":"b"}</Button>
 				<ToggleButton onClick={this.toggleVisibility}>Toggle Filters</ToggleButton>
-				<SearchFilters {...this.props} visible={this.state.visible} />
+				<div>
+				  {this.state.swapFilterParent && <div id="parentA">
+					<SearchFilters {...this.props} visible={this.state.visible}/>
+				  </div>}
+				  {!this.state.swapFilterParent && <div id="parentB">
+					<SearchFilters {...this.props} visible={this.state.visible}/>
+				  </div>}
+				</div>
 			</Navbar>
 		);
 	}
